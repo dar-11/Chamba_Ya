@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHAMBA YA - Búsqueda de Empleo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-50: #eff6ff;
+            --primary-100: #dbeafe;
+            --primary-200: #bfdbfe;
+            --primary-300: #93c5fd;
+            --primary-400: #60a5fa;
+            --primary-500: #3b82f6;
+            --primary-600: #2563eb;
+            --primary-700: #1d4ed8;
+            --primary-800: #1e40af;
+            --primary-900: #1e3a8a;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        /* Estilos para la página de autenticación */
+        .auth-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .logo {
+            width: 250px;
+            height: auto;
+            
+        }
+
+        .form-container {
+            display: none;
+        }
+        .form-container.active {
+            display: block;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        .input-group input:focus {
+            border-color: #3b82f6;
+            outline: none;
+        }
+
+        .switch-form-text {
+            margin-top: 20px;
+            color: #666;
+        }
+        .switch-form-text a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .switch-form-text a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Estilos para la aplicación principal */
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-600);
+            color: white;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-700);
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary-600);
+            border: 1px solid var(--primary-300);
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--primary-50);
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #6b7280;
+            font-size: 12px;
+            padding: 8px 0;
+        }
+        
+        .nav-item.active {
+            color: var(--primary-600);
+        }
+        
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        .page {
+            display: none;
+            padding-bottom: 80px;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e5e7eb;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--primary-600);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Footer azul */
+        .blue-footer {
+            background-color: #3b82f6;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: auto;
+        }
+        .blue-footer p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        /* Ocultar/mostrar secciones */
+        .auth-section {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .app-section {
+            display: none;
+        }
+        
+        .app-section.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sección de Autenticación -->
+    <div class="auth-section" id="auth-section">
+        <div class="auth-container">
+            <!-- Logo -->
+            <div src="w"  class="logo-container">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-blue-100 rounded-2xl mb-4">
+                    <div class="relative">
+                        <i class="fas fa-briefcase text-blue-600 text-3xl"></i>
+                        <i class="fas fa-check-circle text-blue-600 text-lg absolute -bottom-1 -right-1 bg-white rounded-full"></i>
+                    </div>
+                </div>
+                <h2 class="text-blue-600 text-lg font-semibold mb-4">CHAMBA YA</h2>
+                <p class="text-gray-600 text-sm mb-6">
+                    Conectando necesidades, generando oportunidades
+                </p>
+            </div>
+
+            <!-- Formulario de Inicio de Sesión -->
+            <div class="form-container active" id="login-form">
+                <h1 class="text-blue-600 text-2xl font-bold mb-2">Iniciar Sesión</h1>
+                <h3 class="text-blue-600 text-sm mb-6">Ingresa tus credenciales para acceder a tu cuenta</h3>
+                <form id="login-form-element">
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="login-email" placeholder="Correo electrónico" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="login-password" placeholder="Contraseña" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Ingresar</button>
+                </form>
+                <p class="switch-form-text">
+                    ¿No tienes una cuenta? 
+                    <a href="#" id="show-register">Regístrate</a>
+                </p>
+            </div>
+
+            <!-- Formulario de Registro -->
+            <div class="form-container" id="register-form">
+                <h1 class="text-blue-600 text-2xl font-bold mb-2">Registrarse</h1>
+                <h3 class="text-blue-600 text-sm mb-6">Completa tus datos para crear una nueva cuenta</h3>
+                <form id="register-form-element">
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="register-name" placeholder="Nombre completo" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="register-email" placeholder="Correo electrónico" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="register-password" placeholder="Contraseña" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="register-confirm-password" placeholder="Confirmar contraseña" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Crear cuenta</button>
+                </form>
+                <p class="switch-form-text">
+                    ¿Ya tienes una cuenta? 
+                    <a href="#" id="show-login">Inicia sesión</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer Azul -->
+        <footer class="blue-footer">
+            <p>© 2024 CHAMBA YA - Todos los derechos reservados</p>
+        </footer>
+    </div>
+
+    <!-- Sección de la Aplicación Principal -->
+    <div class="app-section" id="app-section">
+        <div class="min-h-screen bg-gray-50">
+            <!-- Páginas de la aplicación -->
+            <div id="search-page" class="page active">
+                <!-- Header con logo -->
+                <div class="bg-white px-4 py-6 text-center border-b border-gray-200">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-2xl mb-4">
+                        <div class="relative">
+                            <i class="fas fa-briefcase text-blue-600 text-2xl"></i>
+                            <i class="fas fa-check-circle text-blue-600 text-sm absolute -bottom-1 -right-1 bg-white rounded-full"></i>
+                        </div>
+                    </div>
+                    <h1 class="text-xl font-semibold text-gray-900 mb-2">
+                        Conectando necesidades, generando oportunidades
+                    </h1>
+                    
+                    <!-- Barra de búsqueda -->
+                    <div class="relative mt-4">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input
+                            type="text"
+                            id="search-input"
+                            placeholder="¿Qué empleo buscas?"
+                            class="w-full pl-10 pr-4 py-3 bg-gray-100 border-0 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-colors duration-200"
+                        >
+                    </div>
+
+                    <!-- Notificación -->
+                    <div class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <div class="w-2 h-2 bg-blue-600 rounded-full"></div>
+                            </div>
+                            <div class="text-left">
+                                <p class="text-sm text-gray-700 font-medium">
+                                    Las notificaciones están desactivadas.
+                                </p>
+                                <p class="text-sm text-gray-600">
+                                    Actívalas para no perder ninguna oportunidad.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alertas -->
+                <div class="px-4 py-4">
+                    <div class="bg-blue-600 text-white p-4 rounded-lg mb-4">
+                        <h2 class="font-semibold mb-2">Mis alertas</h2>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                                    <div class="w-2 h-2 bg-white rounded-full"></div>
+                                </div>
+                                <div>
+                                    <p class="font-medium">Nueva oferta de trabajo</p>
+                                    <p class="text-blue-100 text-sm">Hace 2 horas</p>
+                                </div>
+                            </div>
+                            <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                        </div>
+                    </div>
+
+                    <!-- Lista de trabajos -->
+                    <div class="space-y-4">
+                        <div class="card">
+                            <!-- Header del trabajo -->
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                                        DT
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900">Diseñador Web</h3>
+                                        <p class="text-blue-600 text-sm">Soluciones tecnológicas digitales</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Detalles del trabajo -->
+                            <div class="space-y-2 mb-4">
+                                <div class="flex items-center text-gray-600 text-sm">
+                                    <i class="fas fa-map-marker-alt w-4 h-4 mr-2"></i>
+                                    Ciudad de México, CDMX
+                                </div>
+                                <div class="flex items-center text-gray-600 text-sm">
+                                    <i class="far fa-clock w-4 h-4 mr-2"></i>
+                                    Tiempo completo
+                                </div>
+                                <div class="flex items-center text-gray-600 text-sm">
+                                    <i class="far fa-calendar mr-2"></i>
+                                    Experiencia: 2-4 años
+                                </div>
+                                <div class="text-gray-600 text-sm">
+                                    <i class="fas fa-building mr-2"></i>
+                                    Modalidad: Híbrido (3 días oficina, 2 días remoto)
+                                </div>
+                                <div class="text-gray-600 text-sm">
+                                    <i class="fas fa-briefcase mr-2"></i>
+                                    Beneficios: Seguro médico, vales de despensa
+                                </div>
+                            </div>
+
+                            <!-- Salario -->
+                            <div class="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-gray-600">Salario mensual</p>
+                                        <p class="font-semibold text-green-700">$25,000 - $35,000 pesos mexicanos</p>
+                                    </div>
+                                    <i class="fas fa-dollar-sign text-green-600 text-xl"></i>
+                                </div>
+                            </div>
+
+                            <!-- Habilidades -->
+                            <div class="mb-4">
+                                <p class="text-sm font-medium text-gray-700 mb-2">Habilidades requeridas:</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full">HTML/CSS</span>
+                                    <span class="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full">JavaScript</span>
+                                    <span class="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full">Responsive</span>
+                                    <span class="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full">Figma</span>
+                                    <span class="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full">Adobe XD</span>
+                                </div>
+                            </div>
+
+                            <!-- Botones de acción -->
+                            <div class="flex space-x-3">
+                                <button class="btn-primary flex-1">
+                                    Ver detalles
+                                </button>
+                                <button class="btn-secondary flex-1">
+                                    Postularme
+                                </button>
+                            </div>
+
+                            <!-- Coincidencia -->
+                            <div class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-check-circle text-blue-600 text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-blue-900">Coincidencia perfecta</p>
+                                        <p class="text-sm text-blue-700">Esta oferta coincide con tus preferencias de búsqueda.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="applications-page" class="page">
+                <!-- Header -->
+                <div class="bg-blue-600 text-white px-4 py-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h1 class="text-xl font-semibold">Mis postulaciones</h1>
+                        <span class="text-sm opacity-90" id="current-time">11:58</span>
+                    </div>
+                    
+                    <!-- Estadísticas -->
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="bg-white/10 rounded-lg p-4 text-center">
+                            <div class="text-2xl font-bold">2</div>
+                            <div class="text-sm opacity-90">Total</div>
+                        </div>
+                        <div class="bg-white/10 rounded-lg p-4 text-center">
+                            <div class="text-2xl font-bold">1</div>
+                            <div class="text-sm opacity-90">Aceptadas</div>
+                        </div>
+                        <div class="bg-white/10 rounded-lg p-4 text-center">
+                            <div class="text-2xl font-bold">1</div>
+                            <div class="text-sm opacity-90">En revisión</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contenido -->
+                <div class="px-4 py-6">
+                    <div class="mb-6">
+                        <h2 class="text-lg font-semibold text-gray-900 mb-2">Mis aplicaciones</h2>
+                        <p class="text-gray-600 text-sm">Historial de postulaciones enviadas</p>
+                    </div>
+
+                    <!-- Lista de aplicaciones -->
+                    <div class="space-y-4">
+                        <div class="card">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                                        D
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900">Desarrollador Frontend React</h3>
+                                        <p class="text-blue-600 text-sm">TechCorp México</p>
+                                    </div>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    En revisión
+                                </span>
+                            </div>
+
+                            <div class="space-y-2 mb-4">
+                                <div class="flex items-center text-gray-600 text-sm">
+                                    <i class="fas fa-map-marker-alt w-4 h-4 mr-2"></i>
+                                    Guadalajara, Jalisco
+                                </div>
+                                <div class="flex items-center text-gray-600 text-sm">
+                                    <i class="fas fa-dollar-sign w-4 h-4 mr-2"></i>
+                                    Salario: $30,000 - $45,000 MXN
+                                </div>
+                                <div class="flex items-center text-gray-600 text-sm">
+                                    <i class="far fa-clock w-4 h-4 mr-2"></i>
+                                    Aplicado hace 3 días
+                                </div>
+                            </div>
+
+                            <div class="flex space-x-3">
+                                <button class="btn-primary flex-1">
+                                    Ver detalles
+                                </button>
+                                <button class="btn-secondary flex-1">
+                                    Retirar aplicación
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                                        D
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900">Diseñador UX/UI Senior</h3>
+                                        <p class="text-blue-600 text-sm">Estudio creativo</p>
+                                    </div>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    Aceptado
+                                </span>
+                            </div>
+
+                            <div class="space-y-2 mb-4">
+                                <div class="flex items-center text-gray-600 text-sm">
+                                    <i class="fas fa-map-marker-alt w-4 h-4 mr-2"></i>
+                                    Ciudad de México, CDMX
+                                </div>
+                                <div class="flex items-center text-gray-600 text-sm">
+                                    <i class="fas fa-dollar-sign w-4 h-4 mr-2"></i>
+                                    Salario: $35,000 - $50,000 MXN
+                                </div>
+                                <div class="flex items-center text-gray-600 text-sm">
+                                    <i class="far fa-clock w-4 h-4 mr-2"></i>
+                                    Aplicado hace 1 semana
+                                </div>
+                            </div>
+
+                            <div class="flex space-x-3">
+                                <button class="btn-primary flex-1">
+                                    Ver detalles
+                                </button>
+                                <button class="btn-secondary flex-1">
+                                    Ver oferta
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sección de búsqueda adicional -->
+                    <div class="mt-8 text-center">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+                            <div class="text-blue-600 text-2xl">📤</div>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">¿Buscas más oportunidades?</h3>
+                        <p class="text-gray-600 mb-4">Encuentra nuevas ofertas de trabajo y agrega tus favoritos.</p>
+                        <button class="btn-primary" onclick="showPage('search-page')">
+                            Buscar trabajos
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="favorites-page" class="page">
+                <!-- Header -->
+                <div class="bg-blue-600 text-white px-4 py-6">
+                    <div class="flex items-center justify-between">
+                        <h1 class="text-xl font-semibold">Favoritos</h1>
+                        <span class="text-sm opacity-90">11:58</span>
+                    </div>
+                </div>
+
+                <!-- Contenido -->
+                <div class="px-4 py-6">
+                    <div class="mb-6">
+                        <h2 class="text-lg font-semibold text-gray-900 mb-2">Mis trabajos favoritos</h2>
+                        <p class="text-gray-600 text-sm">1 oferta guardada</p>
+                    </div>
+
+                    <!-- Lista de favoritos -->
+                    <div class="space-y-4">
+                        <div class="card">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                                        TC
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900">Desarrollador Frontend React</h3>
+                                        <p class="text-blue-600 text-sm">TechCorp México</p>
+                                    </div>
+                                </div>
+                                <button class="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                                    <i class="fas fa-heart text-xl"></i>
+                                </button>
+                            </div>
+
+                            <div class="space-y-2 mb-4">
+                                <div class="flex items-center text-gray-600 text-sm">
+                                    <i class="fas fa-map-marker-alt w-4 h-4 mr-2"></i>
+                                    Guadalajara, Jalisco
+                                </div>
+                                <div class="flex items-center text-gray-600 text-sm">
+                                    <i class="far fa-clock w-4 h-4 mr-2"></i>
+                                    Remoto • Tiempo completo
+                                </div>
+                                <div class="flex items-center text-gray-600 text-sm">
+                                    <i class="far fa-calendar mr-2"></i>
+                                    Experiencia: 3-5 años
+                                </div>
+                            </div>
+
+                            <!-- Salario -->
+                            <div class="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-gray-600">Salario mensual</p>
+                                        <p class="font-semibold text-green-700">$30,000 - $45,000 pesos mexicanos</p>
+                                    </div>
+                                    <i class="fas fa-dollar-sign text-green-600 text-xl"></i>
+                                </div>
+                            </div>
+
+                            <!-- Tags -->
+                            <div class="mb-4">
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full">Relacional</span>
+                                    <span class="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full">Mercadotecnia</span>
+                                    <span class="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full">NextJs</span>
+                                    <span class="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full">Venta de cola</span>
+                                </div>
+                            </div>
+
+                            <!-- Botones de acción -->
+                            <div class="flex space-x-3">
+                                <button class="btn-primary flex-1">
+                                    Ver detalles
+                                </button>
+                                <button class="btn-secondary flex-1">
+                                    Postularme
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sección de búsqueda adicional -->
+                    <div class="mt-8 text-center">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+                            <i class="fas fa-heart text-blue-600 text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">¿Buscas más oportunidades?</h3>
+                        <p class="text-gray-600 mb-4">Explora nuevas ofertas y agrega tus favoritos.</p>
+                        <button class="btn-primary" onclick="showPage('search-page')">
+                            Buscar trabajos
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="alerts-page" class="page">
+                <!-- Header -->
+                <div class="bg-blue-600 text-white px-4 py-6">
+                    <div class="flex items-center justify-between">
+                        <h1 class="text-xl font-semibold">Alertas</h1>
+                        <span class="text-sm opacity-90">11:58</span>
+                    </div>
+                </div>
+
+                <!-- Contenido -->
+                <div class="px-4 py-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h2 class="text-lg font-semibold text-gray-900">Mis alertas de trabajo</h2>
+                            <p class="text-gray-600 text-sm">Recibe notificaciones de nuevas ofertas</p>
+                        </div>
+                        <button class="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-plus text-xl"></i>
+                        </button>
+                    </div>
+
+                    <!-- Lista de alertas -->
+                    <div class="space-y-4">
+                        <div class="card">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-12 h-12 rounded-lg flex items-center justify-center bg-blue-100">
+                                        <i class="fas fa-bell text-blue-600 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-gray-900">Desarrollador React</h3>
+                                        <p class="text-gray-600 text-sm">Nuevas ofertas en Ciudad de México</p>
+                                        <p class="text-gray-500 text-xs mt-1">Frecuencia: Diario</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                                        3
+                                    </span>
+                                    <button class="p-2 text-gray-400 hover:text-gray-600 transition-colors">
+                                        <i class="fas fa-cog text-lg"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-medium text-green-600">
+                                    Activa
+                                </span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-12 h-12 rounded-lg flex items-center justify-center bg-gray-100">
+                                        <i class="fas fa-bell text-gray-400 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-gray-900">Diseñador UX/UI</h3>
+                                        <p class="text-gray-600 text-sm">Trabajos remotos disponibles</p>
+                                        <p class="text-gray-500 text-xs mt-1">Frecuencia: Semanal</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <button class="p-2 text-gray-400 hover:text-gray-600 transition-colors">
+                                        <i class="fas fa-cog text-lg"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-medium text-gray-500">
+                                    Inactiva
+                                </span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Crear nueva alerta -->
+                    <div class="mt-8">
+                        <button class="w-full p-4 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-300 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-plus text-xl mx-auto mb-2"></i>
+                            <span class="block font-medium">Crear nueva alerta</span>
+                            <span class="text-sm">Configura alertas personalizadas para recibir ofertas relevantes</span>
+                        </button>
+                    </div>
+
+                    <!-- Información adicional -->
+                    <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-bell text-blue-600 text-xl mt-0.5"></i>
+                            <div>
+                                <h3 class="font-medium text-blue-900 mb-1">¿Cómo funcionan las alertas?</h3>
+                                <p class="text-sm text-blue-700">
+                                    Recibirás notificaciones por email cuando haya nuevas ofertas que coincidan con tus criterios de búsqueda.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="menu-page" class="page">
+                <!-- Header -->
+                <div class="bg-blue-600 text-white px-4 py-6">
+                    <div class="flex items-center justify-between">
+                        <h1 class="text-xl font-semibold">Menú</h1>
+                        <span class="text-sm opacity-90">11:58</span>
+                    </div>
+                </div>
+
+                <!-- Perfil del usuario -->
+                <div class="px-4 py-6 bg-white border-b border-gray-200">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user text-blue-600 text-2xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-semibold text-gray-900" id="user-name">
+                                Usuario
+                            </h2>
+                            <p class="text-gray-600" id="user-email">usuario@ejemplo.com</p>
+                            <p class="text-sm text-blue-600 mt-1">Ver y editar perfil</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Opciones del menú -->
+                <div class="px-4 py-6">
+                    <div class="space-y-2">
+                        <button class="w-full p-4 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors text-left">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-user text-gray-600 text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-gray-900">Mi Perfil</h3>
+                                        <p class="text-sm text-gray-600">Información personal y CV</p>
+                                    </div>
+                                </div>
+                                <i class="fas fa-chevron-right text-gray-400 text-lg"></i>
+                            </div>
+                        </button>
+                        
+                        <button class="w-full p-4 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors text-left" onclick="showPage('applications-page')">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-file-alt text-gray-600 text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-gray-900">Mis Postulaciones</h3>
+                                        <p class="text-sm text-gray-600">Historial de aplicaciones</p>
+                                    </div>
+                                </div>
+                                <i class="fas fa-chevron-right text-gray-400 text-lg"></i>
+                            </div>
+                        </button>
+                        
+                        <button class="w-full p-4 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors text-left" onclick="showPage('favorites-page')">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-heart text-gray-600 text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-gray-900">Trabajos Guardados</h3>
+                                        <p class="text-sm text-gray-600">Ofertas favoritas</p>
+                                    </div>
+                                </div>
+                                <i class="fas fa-chevron-right text-gray-400 text-lg"></i>
+                            </div>
+                        </button>
+                        
+                        <button class="w-full p-4 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors text-left" onclick="showPage('alerts-page')">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-bell text-gray-600 text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-gray-900">Notificaciones</h3>
+                                        <p class="text-sm text-gray-600">Alertas y configuración</p>
+                                    </div>
+                                </div>
+                                <i class="fas fa-chevron-right text-gray-400 text-lg"></i>
+                            </div>
+                        </button>
+                        
+                        <button class="w-full p-4 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors text-left">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-cog text-gray-600 text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-gray-900">Configuración</h3>
+                                        <p class="text-sm text-gray-600">Preferencias de la app</p>
+                                    </div>
+                                </div>
+                                <i class="fas fa-chevron-right text-gray-400 text-lg"></i>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Botón de cerrar sesión -->
+                    <div class="mt-8">
+                        <button class="w-full p-4 bg-white rounded-lg border border-red-200 hover:bg-red-50 transition-colors text-left" onclick="logout()">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-sign-out-alt text-red-600 text-lg"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium text-red-900">Cerrar Sesión</h3>
+                                    <p class="text-sm text-red-600">Salir de tu cuenta</p>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Información de la app -->
+                    <div class="mt-8 text-center">
+                        <p class="text-sm text-gray-500">Versión 1.0.0</p>
+                        <p class="text-xs text-gray-400 mt-1">
+                            © 2024 CHAMBA YA - Todos los derechos reservados.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navegación inferior -->
+            <div class="fixed bottom-0 left-0 right-0 bg-blue-600 border-t border-blue-700 px-4 py-2">
+                <div class="flex justify-around">
+                    <button onclick="showPage('search-page')" class="nav-item active text-white">
+                        <i class="fas fa-search"></i>
+                        <span>Buscar</span>
+                    </button>
+                    <button onclick="showPage('applications-page')" class="nav-item text-blue-200">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Postulaciones</span>
+                    </button>
+                    <button onclick="showPage('favorites-page')" class="nav-item text-blue-200">
+                        <i class="fas fa-heart"></i>
+                        <span>Favoritos</span>
+                    </button>
+                    <button onclick="showPage('alerts-page')" class="nav-item text-blue-200">
+                        <i class="fas fa-bell"></i>
+                        <span>Alertas</span>
+                    </button>
+                    <button onclick="showPage('menu-page')" class="nav-item text-blue-200">
+                        <i class="fas fa-bars"></i>
+                        <span>Menú</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let currentUser = null;
+
+        // Cambiar entre formularios de login y registro
+        document.getElementById('show-register').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('login-form').classList.remove('active');
+            document.getElementById('register-form').classList.add('active');
+        });
+
+        document.getElementById('show-login').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('register-form').classList.remove('active');
+            document.getElementById('login-form').classList.add('active');
+        });
+
+        // Manejar login
+        document.getElementById('login-form-element').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (email && password) {
+                // Simular login exitoso
+                currentUser = {
+                    name: email.split('@')[0],
+                    email: email
+                };
+                
+                // Actualizar información del usuario en el menú
+                document.getElementById('user-name').textContent = currentUser.name;
+                document.getElementById('user-email').textContent = currentUser.email;
+                
+                // Cambiar a la aplicación principal
+                document.getElementById('auth-section').style.display = 'none';
+                document.getElementById('app-section').classList.add('active');
+                
+                // Mostrar mensaje de bienvenida
+                alert(`¡Bienvenido ${currentUser.name}!`);
+            } else {
+                alert('Por favor, completa todos los campos');
+            }
+        });
+
+        // Manejar registro
+        document.getElementById('register-form-element').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            
+            if (name && email && password && confirmPassword) {
+                if (password === confirmPassword) {
+                    // Simular registro exitoso
+                    currentUser = {
+                        name: name,
+                        email: email
+                    };
+                    
+                    // Actualizar información del usuario en el menú
+                    document.getElementById('user-name').textContent = currentUser.name;
+                    document.getElementById('user-email').textContent = currentUser.email;
+                    
+                    // Cambiar a la aplicación principal
+                    document.getElementById('auth-section').style.display = 'none';
+                    document.getElementById('app-section').classList.add('active');
+                    
+                    // Mostrar mensaje de bienvenida
+                    alert(`¡Cuenta creada exitosamente! Bienvenido ${currentUser.name}!`);
+                } else {
+                    alert('Las contraseñas no coinciden');
+                }
+            } else {
+                alert('Por favor, completa todos los campos');
+            }
+        });
+
+        // Función para cambiar entre páginas de la aplicación
+        function showPage(pageId) {
+            // Ocultar todas las páginas
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Mostrar la página seleccionada
+            document.getElementById(pageId).classList.add('active');
+            
+            // Actualizar navegación activa
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                item.classList.remove('text-white');
+                item.classList.add('text-blue-200');
+            });
+            
+            // Marcar el botón correspondiente como activo
+            const navButtons = document.querySelectorAll('.nav-item');
+            if (pageId === 'search-page') {
+                navButtons[0].classList.add('active');
+                navButtons[0].classList.add('text-white');
+                navButtons[0].classList.remove('text-blue-200');
+            } else if (pageId === 'applications-page') {
+                navButtons[1].classList.add('active');
+                navButtons[1].classList.add('text-white');
+                navButtons[1].classList.remove('text-blue-200');
+            } else if (pageId === 'favorites-page') {
+                navButtons[2].classList.add('active');
+                navButtons[2].classList.add('text-white');
+                navButtons[2].classList.remove('text-blue-200');
+            } else if (pageId === 'alerts-page') {
+                navButtons[3].classList.add('active');
+                navButtons[3].classList.add('text-white');
+                navButtons[3].classList.remove('text-blue-200');
+            } else if (pageId === 'menu-page') {
+                navButtons[4].classList.add('active');
+                navButtons[4].classList.add('text-white');
+                navButtons[4].classList.remove('text-blue-200');
+            }
+        }
+
+        // Función para cerrar sesión
+        function logout() {
+            if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+                currentUser = null;
+                document.getElementById('app-section').classList.remove('active');
+                document.getElementById('auth-section').style.display = 'flex';
+                
+                // Limpiar formularios
+                document.getElementById('login-form-element').reset();
+                document.getElementById('register-form-element').reset();
+                
+                // Volver al formulario de login
+                document.getElementById('register-form').classList.remove('active');
+                document.getElementById('login-form').classList.add('active');
+                
+                alert('Sesión cerrada exitosamente');
+            }
+        }
+        
+        // Actualizar hora actual
+        function updateTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const timeElement = document.getElementById('current-time');
+            if (timeElement) {
+                timeElement.textContent = `${hours}:${minutes}`;
+            }
+        }
+        
+        // Actualizar la hora cada minuto
+        updateTime();
+        setInterval(updateTime, 60000);
+        
+        // Manejar búsqueda
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        alert(`Buscando: ${this.value}`);
+                        // Aquí iría la lógica de búsqueda real
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
